@@ -5,6 +5,7 @@ extends GridMap
 @onready var Posibility = []
 var terrain = null
 func _ready():
+	print("lol")
 	terrain = get_node("Terrain")
 	Posibility = {
 		"FlatSurface0" = {
