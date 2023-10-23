@@ -1,0 +1,86 @@
+[gd_scene load_steps=14 format=3 uid="uid://d0qn3roe3dwvq"]
+
+[ext_resource type="MeshLibrary" uid="uid://ci2tx7atd8p1m" path="res://GridMapBlank.tres" id="1_3dc16"]
+[ext_resource type="MeshLibrary" uid="uid://d2gvxsr67a1un" path="res://Testing.tres" id="1_52cho"]
+[ext_resource type="PackedScene" uid="uid://cx1yx8q6mynf" path="res://tscn/House.tscn" id="1_ogxvs"]
+[ext_resource type="Script" path="res://tscn/Terrain.gd" id="2_11k0n"]
+[ext_resource type="PackedScene" uid="uid://d2j1qno61yykr" path="res://Assets/HouseLV2.blend" id="2_noum2"]
+[ext_resource type="Shader" path="res://Shader/Sky.gdshader" id="3_r3r8x"]
+[ext_resource type="Script" path="res://Script/HouseLV2.gd" id="4_6p28s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4usgi"]
+albedo_color = Color(0.509804, 0.627451, 0.345098, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6pcvl"]
+material = SubResource("StandardMaterial3D_4usgi")
+size = Vector2(50, 50)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_70g8p"]
+shader = ExtResource("3_r3r8x")
+
+[sub_resource type="Sky" id="Sky_2afme"]
+sky_material = SubResource("ShaderMaterial_70g8p")
+
+[sub_resource type="Environment" id="Environment_eul00"]
+background_color = Color(0.286275, 0.286275, 0.431373, 1)
+sky = SubResource("Sky_2afme")
+ambient_light_color = Color(0.156863, 0.654902, 0.623529, 1)
+glow_normalized = true
+glow_intensity = 4.0
+fog_enabled = true
+fog_light_color = Color(0.384314, 0.592157, 0.584314, 1)
+fog_density = 0.001
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.203922, 0.588235, 0.643137, 1)
+volumetric_fog_emission = Color(0.054902, 0.258824, 0.290196, 1)
+volumetric_fog_emission_energy = 0.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_5qtpn"]
+dof_blur_far_enabled = true
+dof_blur_far_distance = 13.45
+dof_blur_far_transition = 25.0
+dof_blur_near_enabled = true
+dof_blur_near_distance = 3.55
+dof_blur_near_transition = 25.0
+
+[node name="theGame" type="Node3D"]
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("1_3dc16")
+cell_size = Vector3(1, 0.5, 1)
+script = ExtResource("2_11k0n")
+metadata/_editor_floor_ = Vector3(0, 1, 0)
+
+[node name="Terrain" type="GridMap" parent="GridMap"]
+mesh_library = ExtResource("1_52cho")
+cell_size = Vector3(1, 0.5, 1)
+metadata/_editor_floor_ = Vector3(0, -2, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.868588, 0.275585, -0.411834, 9.54269e-09, 0.831091, 0.556136, 0.495534, -0.483053, 0.721876, -9.05222, 5.01623, 5.62719)
+light_energy = 0.4
+shadow_enabled = true
+
+[node name="House" parent="." instance=ExtResource("1_ogxvs")]
+visible = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("PlaneMesh_6pcvl")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.622934, -0.489112, 0.61051, -0.0872966, 0.732091, 0.67559, -0.777389, -0.474143, 0.413346, 8.766, 10.188, 9.024)
+
+[node name="HouseLV2" parent="." instance=ExtResource("2_noum2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+visible = false
+
+[node name="HouseLV3" parent="." instance=ExtResource("2_noum2")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 12, 0, 0)
+visible = false
+script = ExtResource("4_6p28s")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_eul00")
+camera_attributes = SubResource("CameraAttributesPractical_5qtpn")
